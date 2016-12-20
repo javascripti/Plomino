@@ -2,6 +2,8 @@ import {Component, Input, Output, EventEmitter, NgZone} from '@angular/core';
 import {ElementService} from '../services/element.service';
 import {DND_DIRECTIVES} from 'ng2-dnd/ng2-dnd';
 
+var tinymce_ext = require('./tinymce_ext.js');
+
 declare var tinymce: any;
 
 @Component({
@@ -31,13 +33,15 @@ export class TinyMCEComponent {
     @Output() isDirty = new EventEmitter();
     data: string;
 
-    constructor(private _elementService: ElementService, private zone: NgZone) {}
+    constructor(private _elementService: ElementService, private zone: NgZone) {
+
+    }
 
     ngOnInit() {
         let tiny = this;
         tinymce.init({
             selector:'.tinymce-wrap',
-            plugins: ["code", "save", "link"],
+            plugins: ["code", "save", "link", "plomino"],
             toolbar: "save | undo redo | formatselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent | unlink link | image",
             save_onsavecallback: () => { this.saveFormLayout() },
             setup : (editor:any) => {
@@ -50,6 +54,7 @@ export class TinyMCEComponent {
             height : "780",
             resize: false
         });
+        tinymce_ext.init_tinymce();
         this.getFormLayout();
     }
 
