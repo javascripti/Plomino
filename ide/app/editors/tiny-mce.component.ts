@@ -2,7 +2,7 @@ import {Component, Input, Output, EventEmitter, NgZone} from '@angular/core';
 import {ElementService} from '../services/element.service';
 import {DND_DIRECTIVES} from 'ng2-dnd/ng2-dnd';
 
-var tinymce_ext = require('./tinymce_ext.js');
+//var tinymce_ext = require('./tinymce_ext.js');
 
 declare var tinymce: any;
 
@@ -41,7 +41,7 @@ export class TinyMCEComponent {
         let tiny = this;
         tinymce.init({
             selector:'.tinymce-wrap',
-            plugins: ["code", "save", "link", "plomino"],
+            plugins: ["code", "save", "link"],
             toolbar: "save | undo redo | formatselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent | unlink link | image",
             save_onsavecallback: () => { this.saveFormLayout() },
             setup : (editor:any) => {
@@ -54,7 +54,7 @@ export class TinyMCEComponent {
             height : "780",
             resize: false
         });
-        tinymce_ext.init_tinymce();
+//        tinymce_ext.init_tinymce();
         this.getFormLayout();
     }
 
@@ -84,30 +84,31 @@ export class TinyMCEComponent {
     }
 
     dropped(element: any) {
-        /*  tinymce.activeEditor.execCommand('mceInsertContent', false,
+         tinymce.activeEditor.execCommand('mceInsertContent', false,
             '<p><span class="'+element.dragData.type.charAt(0).toLowerCase()+
             element.dragData.type.slice(1)+'Class">'+
             element.dragData.name.split('/').pop()+'</span></p>'
-        );*/
-        
-        let elementType = element.dragData.type; /*ex: PlominoField */
-        let elementName = element.dragData.name.split('/').pop(); /*ex: myField1, name:http://localhost:8080/MyPlone/mydatabase/myform/myfield1  */
-        let elementParent = element.dragData.parent;
-
-        //we should get element info from database 
-        this._elementService.getElementFormLayout(elementName)
-            .subscribe(
-                (data) => { console.log(data)}, //404?
-                err => console.error(err)
-            );
-
-        //according to element info, we should get example_widget. ref: line354 in tinymce.py
-        // let widget_html = example_widget();
-
-         //insert element into tinymce editor   
-         tinymce.activeEditor.execCommand('mceInsertContent', false,
-            '<p><span>'+'<input type="text" value="'+ elementName +'"></span></p>' //inject widget_html into span/div
         );
+        
+        /* NEW */
+        // let elementType = element.dragData.type; /*ex: PlominoField */
+        // let elementName = element.dragData.name.split('/').pop(); /*ex: myField1, name:http://localhost:8080/MyPlone/mydatabase/myform/myfield1  */
+        // let elementParent = element.dragData.parent;
+
+        // //we should get element info from database 
+        // this._elementService.getElementFormLayout(elementName)
+        //     .subscribe(
+        //         (data) => { console.log(data)}, //404?
+        //         err => console.error(err)
+        //     );
+
+        // //according to element info, we should get example_widget. ref: line354 in tinymce.py
+        // // let widget_html = example_widget();
+
+        //  //insert element into tinymce editor   
+        //  tinymce.activeEditor.execCommand('mceInsertContent', false,
+        //     '<p><span>'+'<input type="text" value="'+ elementName +'"></span></p>' //inject widget_html into span/div
+        // );
     }
 
 }
